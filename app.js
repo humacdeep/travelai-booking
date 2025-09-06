@@ -1,57 +1,79 @@
 // app.js
 
-// 1. Flights via Kiwi API (no key required)
+// Sample fallback data
+const sampleData = {
+  flights: [
+    { airline:"American Airlines", price: 456, duration:"6h 15m" },
+    { airline:"Delta",            price: 489, duration:"6h 30m" },
+    { airline:"JetBlue",          price: 398, duration:"6h 45m" }
+  ],
+  hotels: [
+    { name:"Budget Inn", price:59, rating:3.8 },
+    { name:"City Lodge", price:79, rating:4.1 },
+    { name:"Grand Stay", price:129, rating:4.5 }
+  ],
+  cars: [
+    { company:"Hertz",      type:"Economy", price:39 },
+    { company:"Avis",       type:"Compact", price:49 },
+    { company:"Enterprise", type:"SUV",     price:69 }
+  ]
+};
+
+// Parse date flexibly into DD/MM/YYYY
+function formatDateForKiwi(rawDate) {
+  let parts;
+  if (rawDate.includes('-')) {
+    parts = rawDate.split('-');              // ["YYYY","MM","DD"]
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  } else {
+    parts = rawDate.split('/');              // ["MM","DD","YYYY"]
+    return `${parts[1]}/${parts[0]}/${parts[2]}`;
+  }
+}
+
+// 1. Flights via Kiwi API with CORS proxy
 async function searchFlights({ from, to, date }) {
-  const [year, month, day] = date.split('-');
-  const dateStr = `${day}/${month}/${year}`;
-  const url = new URL('https://api.skypicker.com/flights');
-  url.searchParams.set('fly_from', from);
-  url.searchParams.set('fly_to', to);
-  url.searchParams.set('date_from', dateStr);
-  url.searchParams.set('date_to', dateStr);
-  url.searchParams.set('partner', 'picky');
-  url.searchParams.set('limit', 5);
-  url.searchParams.set('curr', 'USD');
+  const dateStr = formatDateForKiwi(date);
+  const kiwiUrl = new URL('https://api.skypicker.com/flights');
+  kiwiUrl.searchParams.set('fly_from', from);
+  kiwiUrl.searchParams.set('fly_to', to);
+  kiwiUrl.searchParams.set('date_from', dateStr);
+  kiwiUrl.searchParams.set('date_to', dateStr);
+  kiwiUrl.searchParams.set('partner', 'picky');
+  kiwiUrl.searchParams.set('limit', 5);
+  kiwiUrl.searchParams.set('curr', 'USD');
 
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Flights error ${res.status}`);
-  const data = await res.json();
-  return data.data.map(f => ({
-    airline: f.airlines[0] || 'N/A',
-    price: f.price,
-    duration: f.fly_duration,
-    departure: new Date(f.dTime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    arrival: new Date(f.aTime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-  }));
+  const proxy = 'https://api.allorigins.win/raw?url=';
+  try {
+    const res = await fetch(proxy + encodeURIComponent(kiwiUrl.toString()));
+    if (!res.ok) throw new Error(`Flights error ${res.status}`);
+    const data = await res.json();
+    return data.data.map(f => ({
+      airline: f.airlines[0] || 'N/A',
+      price: f.price,
+      duration: f.fly_duration
+    }));
+  } catch (err) {
+    console.warn('Kiwi fetch failed, falling back to sample data:', err);
+    return sampleData.flights;
+  }
 }
 
-// 2. Hotels via mock data
+// 2. Hotels (mock data)
 async function searchHotels() {
-  const hotels = [
-    { name: 'Budget Inn', price: 59, rating: 3.8 },
-    { name: 'City Lodge', price: 79, rating: 4.1 },
-    { name: 'Grand Stay', price: 129, rating: 4.5 }
-  ];
-  return hotels.map(h => ({
-    ...h,
-    points: Math.round(h.price * 100)
-  }));
+  return sampleData.hotels;
 }
 
-// 3. Cars mock data
+// 3. Cars (mock data)
 async function searchCars() {
-  return [
-    { company: 'Hertz', type: 'Economy', price: 39 },
-    { company: 'Avis', type: 'Compact', price: 49 },
-    { company: 'Enterprise', type: 'SUV', price: 69 }
-  ];
+  return sampleData.cars;
 }
 
-// 4. Handle Search button
+// Render results
 async function handleSearch() {
-  const from = document.getElementById('from').value;
-  const to = document.getElementById('to').value;
-  const date = document.getElementById('date').value;
+  const from      = document.getElementById('from').value.trim();
+  const to        = document.getElementById('to').value.trim();
+  const date      = document.getElementById('date').value.trim();
   const resultsEl = document.getElementById('results');
   resultsEl.innerHTML = 'Searching…';
 
@@ -78,7 +100,7 @@ async function handleSearch() {
 
     resultsEl.innerHTML = html;
   } catch (err) {
-    resultsEl.innerHTML = `<p class="error">Error: ${err.message}</p>`;
+    resultsEl.innerHTML = `<p class="error">Unexpected error: ${err.message}</p>`;
   }
 }
 
