@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelAI - AI-Powered Travel Booking</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>TravelAI</span>
+                </div>
+                <nav class="nav">
+                    <a href="#search" class="nav__link">Search</a>
+                    <a href="#deals" class="nav__link">Deals</a>
+                    <a href="#insights" class="nav__link">AI Insights</a>
+                    <button class="btn btn--primary btn--sm" onclick="showProfile()">
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__content">
+                <h1 class="hero__title">AI-Powered Travel Booking</h1>
+                <p class="hero__subtitle">Find the best deals across all platforms with our advanced AI. Book with points or cash for maximum savings.</p>
+                
+                <!-- AI Deal Alert Banner -->
+                <div class="ai-alert">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Alert: Miami flights are 45% off for the next 6 hours - Last minute deal!</span>
+                    <button class="btn btn--sm btn--primary">View Deal</button>
+                </div>
+
+                <!-- Search Interface -->
+                <div class="search-card">
+                    <div class="search-tabs">
+                        <button class="search-tab active" data-tab="flights">
+                            <i class="fas fa-plane"></i> Flights
+                        </button>
+                        <button class="search-tab" data-tab="hotels">
+                            <i class="fas fa-bed"></i> Hotels
+                        </button>
+                        <button class="search-tab" data-tab="cars">
+                            <i class="fas fa-car"></i> Cars
+                        </button>
+                        <button class="search-tab" data-tab="packages">
+                            <i class="fas fa-suitcase"></i> Packages
+                        </button>
+                    </div>
+
+                    <!-- Flight Search -->
+                    <div class="search-content active" id="flights-search">
+                        <div class="search-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">From</label>
+                                    <input type="text" class="form-control" placeholder="JFK - New York" value="JFK - New York">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">To</label>
+                                    <input type="text" class="form-control" placeholder="LAX - Los Angeles" value="LAX - Los Angeles">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Departure</label>
+                                    <input type="date" class="form-control" value="2025-09-15">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Return</label>
+                                    <input type="date" class="form-control" value="2025-09-22">
+                                </div>
+                            </div>
+                            <div class="search-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="flexible-dates"> 
+                                    <span>Flexible dates (±3 days)</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="points-only"> 
+                                    <span>Points/Miles only</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel Search -->
+                    <div class="search-content" id="hotels-search">
+                        <div class="search-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Destination</label>
+                                    <input type="text" class="form-control" placeholder="Los Angeles, CA" value="Los Angeles, CA">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Check-in</label>
+                                    <input type="date" class="form-control" value="2025-09-15">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Check-out</label>
+                                    <input type="date" class="form-control" value="2025-09-22">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Guests</label>
+                                    <select class="form-control">
+                                        <option>2 Adults</option>
+                                        <option>1 Adult</option>
+                                        <option>3 Adults</option>
+                                        <option>4 Adults</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Car Search -->
+                    <div class="search-content" id="cars-search">
+                        <div class="search-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Pick-up Location</label>
+                                    <input type="text" class="form-control" placeholder="LAX Airport" value="LAX Airport">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Pick-up Date</label>
+                                    <input type="date" class="form-control" value="2025-09-15">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Return Date</label>
+                                    <input type="date" class="form-control" value="2025-09-22">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Car Type</label>
+                                    <select class="form-control">
+                                        <option>Any</option>
+                                        <option>Economy</option>
+                                        <option>Compact</option>
+                                        <option>Midsize</option>
+                                        <option>SUV</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Package Search -->
+                    <div class="search-content" id="packages-search">
+                        <div class="search-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">From</label>
+                                    <input type="text" class="form-control" placeholder="New York" value="New York">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">To</label>
+                                    <input type="text" class="form-control" placeholder="Los Angeles" value="Los Angeles">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Departure</label>
+                                    <input type="date" class="form-control" value="2025-09-15">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Duration</label>
+                                    <select class="form-control">
+                                        <option>7 days</option>
+                                        <option>3 days</option>
+                                        <option>5 days</option>
+                                        <option>10 days</option>
+                                        <option>14 days</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn--primary btn--lg btn--full-width search-btn" onclick="performSearch()">
+                        <i class="fas fa-search"></i> Search with AI
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Insights Section -->
+    <section class="insights-section" id="insights">
+        <div class="container">
+            <h2>AI-Powered Insights</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Price Prediction</h3>
+                    <p>Our AI predicts flight prices with 87% accuracy. Current JFK-LAX route likely to rise 15% in next 3 days.</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>Points Optimization</h3>
+                    <p>You could save $340 by using points for this trip. Best value: Chase UR at 1.25x redemption.</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Booking Patterns</h3>
+                    <p>You typically save 23% by booking flights on Tuesday and prefer afternoon departures.</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Smart Alerts</h3>
+                    <p>Price drops for this route historically occur 12% in the next 2 weeks. Set up alerts?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Last Minute Deals Section -->
+    <section class="deals-section" id="deals">
+        <div class="container">
+            <h2>Last-Minute AI Deals</h2>
+            <div class="deals-carousel">
+                <div class="deal-card">
+                    <div class="deal-badge">45% OFF</div>
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" alt="Miami Beach">
+                    <div class="deal-content">
+                        <h3>Miami Beach Getaway</h3>
+                        <p>Flight + 3 nights hotel</p>
+                        <div class="deal-price">
+                            <span class="price-old">$899</span>
+                            <span class="price-new">$494</span>
+                        </div>
+                        <div class="deal-timer">
+                            <i class="fas fa-clock"></i>
+                            <span>Expires in 5h 42m</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="deal-card">
+                    <div class="deal-badge">38% OFF</div>
+                    <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=300&h=200&fit=crop" alt="Paris">
+                    <div class="deal-content">
+                        <h3>Paris Package Deal</h3>
+                        <p>Round-trip flight + 5 nights</p>
+                        <div class="deal-price">
+                            <span class="price-old">$1,299</span>
+                            <span class="price-new">$805</span>
+                        </div>
+                        <div class="deal-timer">
+                            <i class="fas fa-clock"></i>
+                            <span>Expires in 1d 18h</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="deal-card">
+                    <div class="deal-badge">POINTS BONUS</div>
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" alt="Chase UR">
+                    <div class="deal-content">
+                        <h3>Chase UR Bonus</h3>
+                        <p>25% transfer bonus to partners</p>
+                        <div class="deal-price">
+                            <span class="points-bonus">+25% Points</span>
+                        </div>
+                        <div class="deal-timer">
+                            <i class="fas fa-clock"></i>
+                            <span>Expires in 6d 12h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section (Initially Hidden) -->
+    <section class="results-section hidden" id="results">
+        <div class="container">
+            <div class="results-header">
+                <h2>AI-Powered Results</h2>
+                <div class="results-filters">
+                    <button class="filter-btn active" data-filter="best-deal">
+                        <i class="fas fa-trophy"></i> Best Deal
+                    </button>
+                    <button class="filter-btn" data-filter="fastest">
+                        <i class="fas fa-tachometer-alt"></i> Fastest
+                    </button>
+                    <button class="filter-btn" data-filter="most-points">
+                        <i class="fas fa-coins"></i> Most Points
+                    </button>
+                    <button class="filter-btn" data-filter="ai-recommended">
+                        <i class="fas fa-brain"></i> AI Recommended
+                    </button>
+                </div>
+            </div>
+
+            <!-- Flight Results -->
+            <div class="results-grid" id="flight-results">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- User Profile Modal -->
+    <div class="modal hidden" id="profile-modal">
+        <div class="modal__backdrop" onclick="hideProfile()"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h2>Your Travel Profile</h2>
+                <button class="modal__close" onclick="hideProfile()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal__body">
+                <div class="profile-section">
+                    <h3>Loyalty Programs & Points Balance</h3>
+                    <div class="loyalty-programs">
+                        <div class="loyalty-card">
+                            <div class="loyalty-header">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Chase Ultimate Rewards</span>
+                            </div>
+                            <div class="loyalty-balance">
+                                <span class="balance">125,000 points</span>
+                                <span class="value">~$1,563 value</span>
+                            </div>
+                        </div>
+                        <div class="loyalty-card">
+                            <div class="loyalty-header">
+                                <i class="fas fa-plane"></i>
+                                <span>American Airlines</span>
+                            </div>
+                            <div class="loyalty-balance">
+                                <span class="balance">45,000 miles</span>
+                                <span class="value">~$630 value</span>
+                            </div>
+                        </div>
+                        <div class="loyalty-card">
+                            <div class="loyalty-header">
+                                <i class="fas fa-bed"></i>
+                                <span>Marriott Bonvoy</span>
+                            </div>
+                            <div class="loyalty-balance">
+                                <span class="balance">180,000 points</span>
+                                <span class="value">~$1,440 value</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>AI Travel Insights</h3>
+                    <div class="ai-insights">
+                        <div class="insight-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>You typically save 23% by booking flights on Tuesday</p>
+                        </div>
+                        <div class="insight-item">
+                            <i class="fas fa-clock"></i>
+                            <p>Your travel pattern suggests you prefer afternoon departures</p>
+                        </div>
+                        <div class="insight-item">
+                            <i class="fas fa-coins"></i>
+                            <p>You could save $340 by using points for this trip</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Recent Bookings</h3>
+                    <div class="recent-bookings">
+                        <div class="booking-item">
+                            <div class="booking-info">
+                                <span class="route">NYC → LAX</span>
+                                <span class="date">Sep 15, 2025</span>
+                            </div>
+                            <div class="booking-status">
+                                <span class="status status--success">Confirmed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal hidden" id="booking-modal">
+        <div class="modal__backdrop" onclick="hideBookingModal()"></div>
+        <div class="modal__content modal__content--large">
+            <div class="modal__header">
+                <h2>Complete Your Booking</h2>
+                <button class="modal__close" onclick="hideBookingModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal__body">
+                <div class="booking-flow">
+                    <div class="booking-summary" id="booking-summary">
+                        <!-- Booking details will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="payment-options">
+                        <h3>Payment Method</h3>
+                        <div class="payment-tabs">
+                            <button class="payment-tab active" data-payment="cash">
+                                <i class="fas fa-dollar-sign"></i> Cash
+                            </button>
+                            <button class="payment-tab" data-payment="points">
+                                <i class="fas fa-coins"></i> Points/Miles
+                            </button>
+                            <button class="payment-tab" data-payment="combo">
+                                <i class="fas fa-balance-scale"></i> Combination
+                            </button>
+                        </div>
+                        
+                        <div class="payment-content">
+                            <div class="payment-comparison">
+                                <div class="comparison-card">
+                                    <h4>Cash Payment</h4>
+                                    <div class="price-display">$456</div>
+                                    <ul class="price-benefits">
+                                        <li>Instant confirmation</li>
+                                        <li>Earn miles/points</li>
+                                        <li>Full refund eligibility</li>
+                                    </ul>
+                                </div>
+                                <div class="comparison-card recommended">
+                                    <div class="recommendation-badge">AI Recommended</div>
+                                    <h4>Points Payment</h4>
+                                    <div class="price-display">25,000 pts</div>
+                                    <ul class="price-benefits">
+                                        <li>Save $456 cash</li>
+                                        <li>Great redemption value</li>
+                                        <li>Same travel benefits</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn--primary btn--lg btn--full-width" onclick="completeBooking()">
+                        <i class="fas fa-check"></i> Complete Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Competitive Analysis Section -->
+    <section class="competitive-section">
+        <div class="container">
+            <h2>Why TravelAI Outperforms Competitors</h2>
+            <div class="competitive-content">
+                <div class="chart-container">
+                    <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/3e9909dd817679a9b0e1159e1b7889ad/865a9197-3968-4795-a259-ba2cbf36d598/63307eed.png" alt="TravelAI Competitive Analysis" class="competitive-chart">
+                </div>
+                <div class="competitive-features">
+                    <div class="feature-item">
+                        <i class="fas fa-brain"></i>
+                        <div>
+                            <h4>Advanced AI Features</h4>
+                            <p>Machine learning algorithms predict prices with 87% accuracy and provide personalized recommendations.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-coins"></i>
+                        <div>
+                            <h4>Complete Points Integration</h4>
+                            <p>Seamlessly compare cash vs points pricing across all major loyalty programs in real-time.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Last-Minute Deal Engine</h4>
+                            <p>AI-powered algorithm identifies and surfaces the best last-minute deals before they expire.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-layer-group"></i>
+                        <div>
+                            <h4>Universal Aggregation</h4>
+                            <p>Access to all major booking platforms, airlines, and hotels through a single interface.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <div class="logo">
+                        <i class="fas fa-robot"></i>
+                        <span>TravelAI</span>
+                    </div>
+                    <p>The world's most advanced AI-powered travel booking platform.</p>
+                </div>
+                <div class="footer__section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><a href="#">AI Price Predictions</a></li>
+                        <li><a href="#">Points Optimization</a></li>
+                        <li><a href="#">Last-Minute Deals</a></li>
+                        <li><a href="#">Smart Alerts</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Travel Insurance</a></li>
+                        <li><a href="#">Booking Management</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p>&copy; 2025 TravelAI. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
