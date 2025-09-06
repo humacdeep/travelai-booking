@@ -26,7 +26,7 @@ async function searchFlights({ from, to, date }) {
 }
 
 // 2. Hotels via mock data
-async function searchHotels({ city }) {
+async function searchHotels() {
   const hotels = [
     { name: 'Budget Inn', price: 59, rating: 3.8 },
     { name: 'City Lodge', price: 79, rating: 4.1 },
@@ -47,7 +47,7 @@ async function searchCars() {
   ];
 }
 
-// Handle Search button
+// 4. Handle Search button
 async function handleSearch() {
   const from = document.getElementById('from').value;
   const to = document.getElementById('to').value;
@@ -58,7 +58,7 @@ async function handleSearch() {
   try {
     const [flights, hotels, cars] = await Promise.all([
       searchFlights({ from, to, date }),
-      searchHotels({ city: to }),
+      searchHotels(),
       searchCars()
     ]);
 
